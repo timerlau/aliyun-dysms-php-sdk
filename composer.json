@@ -21,7 +21,6 @@
             "Timerlau\\AliyunSms\\": "src/"
         }
     },
-    "minimum-stability": "dev",
     "extra": {
         "laravel": {
             "providers": [
