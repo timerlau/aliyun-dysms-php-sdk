@@ -1,0 +1,35 @@
+{
+    "name": "timerlau/aliyun-dysms-php-sdk",
+    "type": "package",
+    "description": "阿里短信服务SDK For Laravel",
+    "keywords": ["阿里短信服务SDK", "laravel", "aliyun dysms php sdk"],
+    "homepage": "https://github.com/timerlau/aliyun-dysms-php-sdk.git",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "songmw",
+            "email": "imphp@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aliyun\\":"src/lib",
+            "Timerlau\\AliyunSms\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Timerlau\\AliyunSms\\AliyunSmsServiceProvider"
+            ],
+            "aliases": {
+                "Sms": "Timerlau\\AliyunSms\\Facades\\Sms"
+            }
+        }
+    }
+}
