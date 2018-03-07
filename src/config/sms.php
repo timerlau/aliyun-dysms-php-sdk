@@ -11,6 +11,9 @@ return [
 	'ACCESS_KEY_ID'=>env('SMS_ACCESS_KEY_ID'),
 	'ACCESS_KEY_SECRET'=>env('SMS_ACCESS_KEY_SECRET'),
 
+    // MNS消息队列名称
+    'MNS_QUEUE_NAME' => env('SMS_MNS_QUEUE_NAME'),
+
 	// 默认短信签名
 	'default_sign_name'=>env('SMS_DEFAULT_SIGN_NAME'),
 

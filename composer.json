@@ -18,6 +18,7 @@
     "autoload": {
         "psr-4": {
             "Aliyun\\":"src/lib",
+            "AliyunMNS\\": "src/lib/MNS",
             "Timerlau\\AliyunSms\\": "src/"
         }
     },

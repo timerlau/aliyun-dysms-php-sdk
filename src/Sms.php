@@ -39,6 +39,34 @@ class Sms
     }
 
     /**
+     * 获取短信接收情况
+     *
+     * @param callable 回调函数
+     * @param str      接收类型  SmsReport or 上行短信
+     * @return boolean/object 有错误，返回object，没错误，返回true
+     */
+    public function receive(callable $callback, $sms_type = 'SmsReport')
+    {
+        $msg = new Msg;
+        $msg->receiveMsg(
+
+            // 消息类型，SmsReport: 短信状态报告
+            $sms_type,
+
+            // 在云通信页面开通相应业务消息后，就能在页面上获得对应的queueName
+            config('sms.MNS_QUEUE_NAME'),
+
+            /**
+             * 回调
+             * @param stdClass $message 消息数据
+             * @return bool 返回true，则工具类自动删除已拉取的消息。返回false，消息不删除可以下次获取
+             */
+            $callback
+        );
+        return $msg->getException() ? $msg->getException(): True;
+    }
+
+    /**
      * 发送单条短信
      *
      * @return boolean

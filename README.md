@@ -63,4 +63,30 @@ if (!$state) {
 // 短信发送状态 bizid可选
 $sms = Sms::phone($mobile);
 $response = $sms->bizId($biz_id)->history();
+
+// 使用MNS消息队列，查询手机接收状况
+// 需要开启MNS
+
+// 发送短信
+$sms = Sms::phone($mobile);
+$state = $sms->outId($outid)->assign(['code'=>$code])->send();
+
+if (!$state) {
+    dd($sms->getException());
+} else {
+    echo '发送成功 ' . $mobile . '  <br>';
+    echo '发送回执号: ' . $sms->bizId . '<br>';
+
+    $bool = $sms->receive(function ($message) {
+        dump($message);
+        return true;
+    });
+
+    if ($bool != True) {
+        dump($bool);
+        dd('获取短信状态异常');
+    }
+    dump('hello, sms');
+    dd($bool);
+}
 ````
