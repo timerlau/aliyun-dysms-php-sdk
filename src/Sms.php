@@ -103,7 +103,7 @@ class Sms
         // 初始化QuerySendDetailsRequest实例用于设置短信查询的参数
         $request = new QuerySendDetailsRequest();
 
-        // 必填，短信接收号码 如果有 bizid，则可以不用填手机号
+        // 必填，短信接收号码
         $request->setPhoneNumber($this->phone);
 
         // 必填，短信发送日期，格式Ymd，支持近30天记录查询

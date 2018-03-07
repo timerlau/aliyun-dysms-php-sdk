@@ -60,7 +60,7 @@ if (!$state) {
     dd('hello, sms');
 }
 
-// 短信发送状态
-$sms = Sms::bizId($biz_id);
-$response = $sms->history();
+// 短信发送状态 bizid可选
+$sms = Sms::phone($mobile);
+$response = $sms->bizId($biz_id)->history();
 ````
