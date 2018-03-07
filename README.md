@@ -49,16 +49,18 @@ use Sms;
 $state = Sms::phone('手机号')->assign(['code'=>'123456'])->send();
 
 // 设置手机号，赋值变量，选择模板等操作
-$state = Sms::phone('设置手机号')
-                ->sign('设置签名')
-                ->template('设置模板code')
-                ->outId('设置流水号')
-                ->assign(['code'=>'123456'])
-                ->send();
+$sms = Sms::phone($mobile);
+$state = $sms->outId($outid)->assign(['code'=>$code])->send();
 
 if (!$state) {
-    dd(Sms::getException());
+    dd($sms->getException());
 } else {
+    echo '发送成功 <br>';
+    dd('发送回执号: ' . $sms->bizId);
     dd('hello, sms');
 }
+
+// 短信发送状态
+$sms = Sms::bizId($biz_id);
+$response = $sms->history();
 ````
