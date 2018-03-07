@@ -13,14 +13,15 @@ use Aliyun\Api\Sms\Request\V20170525\QuerySendDetailsRequest;
 
 class Sms
 {
-    protected $phone                = '';    // 手机号
-    protected $sign                 = '';    // 签名名称
-    protected $template             = '';    // 模板编号
-    protected $assign               = [];    // 模板变量
-    protected $outId                = null;  // 流水号
-    protected $extendCode           = null;  // 上行扩展码
-    protected $client               = null;  // 阿里云sms的客户端对象
-    protected $exception            = null;  // 异常对象
+    private $phone                = '';    // 手机号
+    private $sign                 = '';    // 签名名称
+    private $template             = '';    // 模板编号
+    private $assign               = [];    // 模板变量
+    private $outId                = null;  // 流水号
+    private $bizId                = null;  // 短信发送成功后，返回的发送回执ID，用来查询的
+    private $extendCode           = null;  // 上行扩展码
+    private $client               = null;  // 阿里云sms的客户端对象
+    private $exception            = null;  // 异常对象
 
     public function __construct($sms_client)
     {
@@ -39,6 +40,8 @@ class Sms
 
     /**
      * 发送单条短信
+     *
+     * @return boolean
      */
     public function send()
     {
@@ -73,12 +76,14 @@ class Sms
             $response = $this->client->getAcsResponse($request);
 
             // $response->Code == 'OK' 发送成功 其他失败
-            if ($response->Code == 'OK') return True;
-
+            if ($response->Code == 'OK') {
+                $this->bizId($response->BizId);
+                return True;
+            }
             throw new SmsException($response->Message, $response->Code);
 
         } catch (SmsException $e) {
-            $this->exception = $e;
+            $this->exception($e);
             return False;
         }
     }
@@ -89,7 +94,7 @@ class Sms
      * @param date 查询日期           格式 Ymd 默认当天
      * @param int  页码               默认 1
      * @param int  显示条数           默认 10
-     * @return [TotalCount=>0, SmsSendDetailDTOs=>[SmsSendDetailDTO]]
+     * @return response [TotalCount=>0, SmsSendDetailDTOs=>[SmsSendDetailDTO]]
      */
     public function history($date = null, $page = 1, $limit = 10)
     {
@@ -98,7 +103,7 @@ class Sms
         // 初始化QuerySendDetailsRequest实例用于设置短信查询的参数
         $request = new QuerySendDetailsRequest();
 
-        // 必填，短信接收号码
+        // 必填，短信接收号码 如果有 bizid，则可以不用填手机号
         $request->setPhoneNumber($this->phone);
 
         // 必填，短信发送日期，格式Ymd，支持近30天记录查询
@@ -110,9 +115,9 @@ class Sms
         // 必填，当前页码
         $request->setCurrentPage($page);
 
-        // 可选，设置流水号
-        if ($this->outId && !empty($this->outId)) {
-            $request->setBizId($this->outId);
+        // 可选，设置发送回执ID
+        if ($this->bizId && !empty($this->bizId)) {
+            $request->setBizId($this->bizId);
         }
 
         try {
@@ -126,9 +131,18 @@ class Sms
             throw new SmsException($response->Message, $response->Code);
 
         } catch (SmsException $e) {
-            $this->exception = $e;
+            $this->exception($e);
             return False;
         }
+    }
+
+    /**
+     * 设置错误对象
+     */
+    public function exception($exception)
+    {
+        $this->exception = $exception;
+        return $this;
     }
 
     /**
@@ -201,6 +215,17 @@ class Sms
     }
 
     /**
+     * 短信发送成功后，返回的发送回执ID，用来查询的发送状态的
+     *
+     * @param str   $biz_id
+     */
+    public function bizId($biz_id)
+    {
+        $this->bizId = $biz_id;
+        return $this;
+    }
+
+    /**
      * 设置上行短信扩展码
      */
     public function extendCode($extend_code)
@@ -211,6 +236,6 @@ class Sms
 
     public function __get($name)
     {
-        return $this->name;
+        return isset($this->$name) ? $this->$name: False;
     }
 }

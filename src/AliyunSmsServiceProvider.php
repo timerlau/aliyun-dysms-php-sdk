@@ -34,7 +34,7 @@ class AliyunSmsServiceProvider extends ServiceProvider
 
     private function _registerApp()
     {
-        $this->app->singleton(static::$abstract, function ($app) {
+        $this->app->bind(static::$abstract, function ($app) {
             return new Sms(AliyunSmsAcsClient::getAcsClient());
         });
     }
