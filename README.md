@@ -64,7 +64,7 @@ if (!$state) {
 $sms = Sms::phone($mobile);
 $response = $sms->bizId($biz_id)->history();
 
-// 使用MNS消息队列，查询手机接收状况
+// 使用MNS消息队列，查询手机接收状况 （消息队列不太好，建议使用 HTTP批量推送模式）
 // 需要开启MNS
 
 // 发送短信
@@ -82,11 +82,24 @@ if (!$state) {
         return true;
     });
 
-    if ($bool != True) {
+    if ($bool !== True) {
         dump($bool);
         dd('获取短信状态异常');
     }
     dump('hello, sms');
     dd($bool);
 }
+
+// 批量发送短信
+$phone = ['176xxx','186xxx','187xxx'];
+$sign = ['签名1', '签名1', '签名1'];
+$template = 'SMS_xxx';
+
+$assign = [];
+foreach ($phone as $mobile) {
+    $assign[]['code'] = mt_rand(1000, 9999);
+}
+
+$sms = Sms::phone($phone)->sign($sign)->template($template)->assign($assign);
+dd($sms->multiSend());
 ````
