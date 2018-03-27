@@ -223,12 +223,12 @@ class Sms
     public function phone($phone)
     {
         if (is_array($phone)) {
-            array_walk($phone, function(&$item){
-                $item = (int)substr($item, 0, 11);
+            array_walk($phone, function(&$item) {
+                $item = substr($item, 0, 11);
             });
             $this->phone = $phone;
         } else {
-            $this->phone = (int)$phone;
+            $this->phone = substr($phone, 0, 11);
         }
         return $this;
     }
