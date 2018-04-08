@@ -11,7 +11,7 @@ guzzlehttp/guzzle >= 6.0
 # 说明
 ````
 1. 没有对阿里云的SDK做任何修改！可以放心使用！
-1.1 master分支修复了阿里云SDK的一个[BUG]（https://github.com/timerlau/aliyun-dysms-php-sdk/commit/0b37c4a93b8bfc4ae59f678be6bc68da0e905c48）
+1.1 master分支修复了阿里云SDK的一个[BUG](https://github.com/timerlau/aliyun-dysms-php-sdk/commit/0b37c4a93b8bfc4ae59f678be6bc68da0e905c48)
 1.2 nofix分支保持阿里云SDK原样
 2. 集成了 api_sdk，msg_sdk。不过根据实际使用情况来说，建议设置callback地址更为方便。msg_sdk的队列消息处理不当会很乱。
 ````
